@@ -1,0 +1,33 @@
+.gradle
+!gradle/wrapper/gradle-wrapper.jar
+/out
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+/src/main/resources/
+/build/classes/
+/build/generated/
+/build/resources/
+/build/tmp/
+/build/bootJarMainClassName
+/build/libs/
+/bin/main/application.properties
