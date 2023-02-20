@@ -42,8 +42,44 @@ public class UserService {
         duplicateEmail(joinRequestDto.getEmail());
         userRepository.save(joinRequestDto.toEntity());
     }
+    public LoginResponseVo login(LoginRequestDto loginRequestDto) {
+        String email = loginRequestDto.toEntity().getEmail();
+        String password = loginRequestDto.toEntity().getPassword();
 
+        User findUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User Doesn't exist"));
 
+        String exactPassword = findUser.getPassword();
+
+        if (!exactPassword.equals(password)) {
+            throw new CustomException(ResponseStatus.UNAUTHORIZED);
+        }
+
+        Long UserId = findUser.getId();
+        UsernamePasswordAuthenticationToken authenticationToken = loginRequestDto.toAuthentication();
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        JwtResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(UserId, authentication);
+
+        tokenRepository.findById(UserId).ifPresentOrElse(
+                t -> {
+                    t.builder()
+                            .refreshToken(tokenInfo.getRefreshToken())
+                            .build();
+                    tokenRepository.save(t);
+                }, () -> {
+                    UserToken ut = UserToken.builder()
+                            .userId(UserId)
+                            .refreshToken(tokenInfo.getRefreshToken())
+                            .build();
+                    tokenRepository.save(ut);
+                }
+        );
+
+        return new LoginResponseVo(
+                tokenInfo.getAccessToken(),
+                tokenInfo.getRefreshToken()
+        );
+    }
 
 
 
