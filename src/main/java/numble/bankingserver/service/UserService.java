@@ -14,9 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import numble.bankingserver.repository.UserTokenRepository;
 import numble.bankingserver.vo.user.LoginResponseVo;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
+//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+//import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+//import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -27,7 +27,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserTokenRepository tokenRepository;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+//    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
 
     private void duplicateEmail(String email) {
@@ -42,6 +42,7 @@ public class UserService {
         duplicateEmail(joinRequestDto.getEmail());
         userRepository.save(joinRequestDto.toEntity());
     }
+
     public LoginResponseVo login(LoginRequestDto loginRequestDto) {
         String email = loginRequestDto.toEntity().getEmail();
         String password = loginRequestDto.toEntity().getPassword();
@@ -56,28 +57,29 @@ public class UserService {
         }
 
         Long UserId = findUser.getId();
-        UsernamePasswordAuthenticationToken authenticationToken = loginRequestDto.toAuthentication();
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        JwtResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(UserId, authentication);
-
-        tokenRepository.findById(UserId).ifPresentOrElse(
-                t -> {
-                    t.builder()
-                            .refreshToken(tokenInfo.getRefreshToken())
-                            .build();
-                    tokenRepository.save(t);
-                }, () -> {
-                    UserToken ut = UserToken.builder()
-                            .userId(UserId)
-                            .refreshToken(tokenInfo.getRefreshToken())
-                            .build();
-                    tokenRepository.save(ut);
-                }
-        );
+//        UsernamePasswordAuthenticationToken authenticationToken = loginRequestDto.toAuthentication();
+//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+//        JwtResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(UserId, authentication);
+//
+//        tokenRepository.findById(UserId).ifPresentOrElse(
+//                t -> {
+//                    t.builder()
+//                            .refreshToken(tokenInfo.getRefreshToken())
+//                            .build();
+//                    tokenRepository.save(t);
+//                }, () -> {
+//                    UserToken ut = UserToken.builder()
+//                            .userId(UserId)
+//                            .refreshToken(tokenInfo.getRefreshToken())
+//                            .build();
+//                    tokenRepository.save(ut);
+//                }
+//        );
 
         return new LoginResponseVo(
-                tokenInfo.getAccessToken(),
-                tokenInfo.getRefreshToken()
+//                tokenInfo.getAccessToken(),
+//                tokenInfo.getRefreshToken()
+                UserId
         );
     }
 

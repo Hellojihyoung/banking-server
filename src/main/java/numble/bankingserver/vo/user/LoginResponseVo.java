@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginResponseVo {
 
-    private String accessToken;
+//    private String accessToken;
+//
+//    private String refreshToken;
 
-    private String refreshToken;
+    private Long userId;
 }
