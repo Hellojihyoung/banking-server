@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-
 //
 //// 자격증명을 제공하지 않고 접근하려고 할때 401에러 내려줌.
 //@Component
