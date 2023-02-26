@@ -5,12 +5,12 @@ import lombok.Getter;
 
 @Getter
 public class SuccessResponse {
-    private ResponseCode status;
+    private ResponseStatus status;
     private String message;
     private Object data;
 
     @Builder
-    public SuccessResponse(ResponseCode status, String message, Object data) {
+    public SuccessResponse(ResponseStatus status, String message, Object data) {
         this.status = status;
         this.message = message;
         this.data = data;
